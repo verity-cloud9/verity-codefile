@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verity Cloud9 Documentation</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        github: {
+                            dark: {
+                                bg: '#0d1117',
+                                canvas: '#161b22',
+                                border: '#30363d',
+                                text: '#c9d1d9',
+                                textMuted: '#8b949e',
+                                accent: '#58a6ff',
+                                accentHover: '#1f6feb',
+                                codeBg: '#161b22',
+                            },
+                            light: {
+                                bg: '#ffffff',
+                                canvas: '#f6f8fa',
+                                border: '#d0d7de',
+                                text: '#24292f',
+                                textMuted: '#57606a',
+                                accent: '#0969da',
+                                accentHover: '#0550ae',
+                                codeBg: '#f6f8fa',
+                            }
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Noto Sans', 'Helvetica', 'Arial', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'SF Mono', 'Menlo', 'Consolas', 'Liberation Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for GitHub-like icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom scrollbars and styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .dark ::-webkit-scrollbar-track { background: #0d1117; }
+        .dark ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb:hover { background: #484f58; }
+        
+        .light ::-webkit-scrollbar-track { background: #ffffff; }
+        .light ::-webkit-scrollbar-thumb { background: #d0d7de; border-radius: 4px; }
+        .light ::-webkit-scrollbar-thumb:hover { background: #afb8c1; }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="bg-github-light dark:bg-github-dark text-github-light-text dark:text-github-dark-text font-sans antialiased transition-colors duration-200 min-h-screen flex flex-col">
+
+    <!-- Top GitHub Header Bar -->
+    <header class="sticky top-0 z-50 flex items-center justify-between px-4 py-3 bg-github-light-canvas dark:bg-github-dark-canvas border-b border-github-light-border dark:border-github-dark-border shadow-sm">
+        <div class="flex items-center space-x-4">
+            <button id="mobile-menu-btn" class="md:hidden text-github-light-text dark:text-github-dark-text hover:text-github-light-accent dark:hover:text-github-dark-accent focus:outline-none p-1">
+                <i class="fa-solid fa-bars text-lg"></i>
+            </button>
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-cloud text-2xl text-github-light-accent dark:text-github-dark-accent"></i>
+                <span class="font-bold text-lg tracking-tight">Verity <span class="text-xs px-2 py-0.5 rounded-full bg-github-light-accent/10 dark:bg-github-dark-accent/10 text-github-light-accent dark:text-github-dark-accent border border-github-light-accent/20 dark:border-github-dark-accent/20">Cloud9</span></span>
+            </div>
+            <nav class="hidden lg:flex items-center space-x-6 text-sm font-medium ml-6">
+                <a href="#overview" class="hover:text-github-light-accent dark:hover:text-github-dark-accent transition-colors">Docs</a>
+                <a href="#api-reference" class="hover:text-github-light-accent dark:hover:text-github-dark-accent transition-colors">API</a>
+                <a href="#configuration" class="hover:text-github-light-accent dark:hover:text-github-dark-accent transition-colors">Guides</a>
+                <a href="#faq" class="hover:text-github-light-accent dark:hover:text-github-dark-accent transition-colors">Community</a>
+            </nav>
+        </div>
+
+        <!-- Search Bar and Controls -->
+        <div class="flex items-center space-x-3">
+            <div class="relative hidden sm:block w-64 md:w-80">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-github-light-textMuted dark:text-github-dark-textMuted">
+                    <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                </span>
+                <input type="text" id="search-input" placeholder="Search docs (Press '/' to focus)" 
+                    class="w-full pl-9 pr-12 py-1.5 text-sm bg-github-light-bg dark:bg-github-dark-bg border border-github-light-border dark:border-github-dark-border rounded-md focus:outline-none focus:border-github-light-accent dark:focus:border-github-dark-accent focus:ring-1 focus:ring-github-light-accent dark:focus:ring-github-dark-accent transition">
+                <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <kbd class="px-1.5 py-0.5 text-[10px] bg-github-light-canvas dark:bg-github-dark-canvas border border-github-light-border dark:border-github-dark-border rounded text-github-light-textMuted dark:text-github-dark-textMuted font-mono">⌘K</kbd>
+                </span>
+            </div>
+
+            <!-- Theme Toggle Button -->
+            <button id="theme-toggle" class="p-2 rounded-md border border-github-light-border dark:border-github-dark-border bg-github-light-bg dark:bg-github-dark-bg hover:bg-github-light-canvas dark:hover:bg-github-dark-canvas text-github-light-text dark:text-github-dark-text transition" title="Toggle theme">
+                <i class="fa-solid fa-sun dark:hidden text-amber-500"></i>
+                <i class="fa-solid fa-moon hidden dark:inline text-blue-400"></i>
+            </button>
+
+            <!-- GitHub Repo Link -->
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center space-x-2 px-3 py-1.5 text-sm font-medium border border-github-light-border dark:border-github-dark-border bg-github-light-bg dark:bg-github-dark-bg hover:bg-github-light-canvas dark:hover:bg-github-dark-canvas rounded-md transition">
+                <i class="fa-brands fa-github text-base"></i>
+                <span>GitHub</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="flex-1 flex max-w-7xl mx-auto w-full">
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-github-light-canvas dark:bg-github-dark-canvas border-r border-github-light-border dark:border-github-dark-border pt-16 md:pt-6 transform -translate-x-full md:translate-x-0 md:static transition-transform duration-200 overflow-y-auto">
+            <div class="px-6 py-4">
+                <div class="text-xs font-semibold text-github-light-textMuted dark:text-github-dark-textMuted uppercase tracking-wider mb-3">Getting Started</div>
+                <ul class="space-y-1 text-sm">
+                    <li><a href="#overview" class="sidebar-link block px-3 py-1.5 rounded-md hover:bg-github-light-border/40 dark:hover:bg-github-dark-border/40 transition font-medium text-github-light-accent dark:text-github-dark-accent">Overview</a></li>
+                    <li><a href="#quickstart" class="sidebar-link block px-3 py-1.5 rounded-md hover:bg-github-light-border/40 dark:hover:bg-github-dark-border/40 transition">Quickstart Guide</a></li>
+                    <li><a href="#installation" class="sidebar-link block px-3 py-1.5 rounded-md hover:bg-github-light-border/40 dark:hover:bg-github-dark-border/40 transition">Installation & Setup</a></li>
+                </ul>
+
+                <div class="text-xs font-semibold text-github-light-textMuted dark:text-github-dark-textMuted uppercase tracking-wider mt-6 mb-3">Core Concepts</div>
+                <ul class="space-y-1 text-sm">
+                    <li><a href="#architecture" class="sidebar-link block px-3 py-1.5 rounded-md hover:bg-github-light-border/40 dark:hover:bg-github-dark-border/40 transition">Architecture & Nodes</a></li>
+                    <li><a href="#configuration" class="sidebar-link block px-3 py-1.5 rounded-md hover:bg-github-light-border/40 dark:hover:bg-github-dark-border/40 transition">Configuration File</a></li>
+                    <li><a href="#security" class="sidebar-link block px-3 py-1.5 rounded-md hover:bg-github-light-border/40 dark:hover:bg-github-dark-border/40 transition">Security & IAM</a></li>
+                </ul>
+
+                <div class="text-xs font-semibold text-github-light-textMuted dark:text-github-dark-textMuted uppercase tracking-wider mt-6 mb-3">Reference</div>
+                <ul class="space-y-1 text-sm">
+                    <li><a href="#api-reference" class="sidebar-link block px-3 py-1.5 rounded-md hover:bg-github-light-border/40 dark:hover:bg-github-dark-border/40 transition">API Reference</a></li>
+                    <li><a href="#cli-commands" class="sidebar-link block px-3 py-1.5 rounded-md hover:bg-github-light-border/40 dark:hover:bg-github-dark-border/40 transition">CLI Commands</a></li>
+                    <li><a href="#troubleshooting" class="sidebar-link block px-3 py-1.5 rounded-md hover:bg-github-light-border/40 dark:hover:bg-github-dark-border/40 transition">Troubleshooting</a></li>
+                    <li><a href="#faq" class="sidebar-link block px-3 py-1.5 rounded-md hover:bg-github-light-border/40 dark:hover:bg-github-dark-border/40 transition">FAQ</a></li>
+                </ul>
+
+                <div class="mt-8 pt-6 border-t border-github-light-border dark:border-github-dark-border text-xs text-github-light-textMuted dark:text-github-dark-textMuted">
+                    <p class="font-medium text-github-light-text dark:text-github-dark-text">Verity Cloud9 v2.4.0</p>
+                    <p class="mt-1">Stable Release • <a href="#" class="text-github-light-accent dark:text-github-dark-accent hover:underline">Release Notes</a></p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Backdrop for mobile sidebar -->
+        <div id="sidebar-backdrop" class="fixed inset-0 z-30 bg-black/50 hidden md:hidden"></div>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 px-4 sm:px-8 py-8 max-w-4xl min-w-0 overflow-hidden">
+            
+            <!-- Breadcrumbs -->
+            <nav class="flex items-center text-xs text-github-light-textMuted dark:text-github-dark-textMuted space-x-2 mb-6">
+                <span>Documentation</span>
+                <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                <span>Guides</span>
+                <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                <span class="text-github-light-text dark:text-github-dark-text font-medium">Overview</span>
+            </nav>
+
+            <!-- SECTION: Overview -->
+            <section id="overview" class="scroll-mt-20 mb-12">
+                <div class="flex items-center justify-between border-b border-github-light-border dark:border-github-dark-border pb-4 mb-6">
+                    <h1 class="text-3xl font-bold tracking-tight">Verity Cloud9 Overview</h1>
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-0.5 text-xs font-semibold rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">Production Ready</span>
+                    </div>
+                </div>
+
+                <p class="text-lg text-github-light-textMuted dark:text-github-dark-textMuted leading-relaxed mb-6">
+                    <strong>Verity Cloud9</strong> is a next-generation distributed cloud orchestration and real-time state synchronization engine. Designed for high-throughput microservices, it bridges edge clusters with multi-cloud environments seamlessly with sub-millisecond overhead.
+                </p>
+
+                <!-- Callout Note -->
+                <div class="p-4 mb-6 border-l-4 border-blue-500 bg-blue-500/10 rounded-r-md text-sm">
+                    <div class="flex items-center font-semibold text-blue-600 dark:text-blue-400 mb-1">
+                        <i class="fa-solid fa-circle-info mr-2"></i> Note for v2.x Migrators
+                    </div>
+                    <p class="text-github-light-text dark:text-github-dark-text">
+                        If you are migrating from Cloud9 v1.x, please review the <a href="#configuration" class="text-github-light-accent dark:text-github-dark-accent underline">v2 Configuration Migration Guide</a> before updating your schema definitions.
+                    </p>
+                </div>
+
+                <h3 class="text-xl font-semibold mt-8 mb-4">Key Capabilities</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <div class="p-4 rounded-lg border border-github-light-border dark:border-github-dark-border bg-github-light-canvas dark:bg-github-dark-canvas">
+                        <div class="text-github-light-accent dark:text-github-dark-accent text-lg mb-2"><i class="fa-solid fa-bolt"></i></div>
+                        <h4 class="font-semibold mb-1">Zero-Latency Sync</h4>
+                        <p class="text-sm text-github-light-textMuted dark:text-github-dark-textMuted">Optimized Gossip protocol ensures state changes propagate across 10,000+ nodes instantaneously.</p>
+                    </div>
+                    <div class="p-4 rounded-lg border border-github-light-border dark:border-github-dark-border bg-github-light-canvas dark:bg-github-dark-canvas">
+                        <div class="text-github-light-accent dark:text-github-dark-accent text-lg mb-2"><i class="fa-solid fa-shield-halved"></i></div>
+                        <h4 class="font-semibold mb-1">Zero-Trust Security</h4>
+                        <p class="text-sm text-github-light-textMuted dark:text-github-dark-textMuted">Built-in mTLS authentication and automatic token rotation for all internal node communication.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: Quickstart -->
+            <section id="quickstart" class="scroll-mt-20 mb-12">
+                <h2 class="text-2xl font-semibold border-b border-github-light-border dark:border-github-dark-border pb-3 mb-4">Quickstart Guide</h2>
+                <p class="text-github-light-textMuted dark:text-github-dark-textMuted mb-4">
+                    Get Verity Cloud9 up and running on your local development cluster in under two minutes using our automated CLI installer.
+                </p>
+
+                <h3 class="text-lg font-medium mb-2">1. Download and Initialize</h3>
+                <!-- Code Block -->
+                <div class="relative rounded-md border border-github-light-border dark:border-github-dark-border bg-github-light-codeBg dark:bg-github-dark-codeBg mb-6 overflow-hidden">
+                    <div class="flex items-center justify-between px-4 py-2 bg-github-light-canvas dark:bg-github-dark-canvas border-b border-github-light-border dark:border-github-dark-border text-xs text-github-light-textMuted dark:text-github-dark-textMuted">
+                        <span>Terminal — Bash</span>
+                        <button onclick="copyCode(this)" class="hover:text-github-light-accent dark:hover:text-github-dark-accent transition flex items-center space-x-1">
+                            <i class="fa-regular fa-copy"></i><span>Copy</span>
+                        </button>
+                    </div>
+                    <pre class="p-4 text-xs sm:text-sm font-mono overflow-x-auto text-github-light-text dark:text-github-dark-text"><code><span class="text-github-light-textMuted dark:text-github-dark-textMuted"># Install the CLI tool globally</span>
+curl -sSL https://get.veritycloud9.io | sh
+
+<span class="text-github-light-textMuted dark:text-github-dark-textMuted"># Initialize workspace</span>
+v9 init my-cluster --region us-east-1</code></pre>
+                </div>
+
+                <h3 class="text-lg font-medium mb-2">2. Verify Cluster Health</h3>
+                <div class="relative rounded-md border border-github-light-border dark:border-github-dark-border bg-github-light-codeBg dark:bg-github-dark-codeBg mb-6 overflow-hidden">
+                    <div class="flex items-center justify-between px-4 py-2 bg-github-light-canvas dark:bg-github-dark-canvas border-b border-github-light-border dark:border-github-dark-border text-xs text-github-light-textMuted dark:text-github-dark-textMuted">
+                        <span>Terminal — Bash</span>
+                        <button onclick="copyCode(this)" class="hover:text-github-light-accent dark:hover:text-github-dark-accent transition flex items-center space-x-1">
+                            <i class="fa-regular fa-copy"></i><span>Copy</span>
+                        </button>
+                    </div>
+                    <pre class="p-4 text-xs sm:text-sm font-mono overflow-x-auto text-github-light-text dark:text-github-dark-text"><code>v9 cluster status --format=json</code></pre>
+                </div>
+            </section>
+
+            <!-- SECTION: Installation -->
+            <section id="installation" class="scroll-mt-20 mb-12">
+                <h2 class="text-2xl font-semibold border-b border-github-light-border dark:border-github-dark-border pb-3 mb-4">Installation & Setup</h2>
+                <p class="text-github-light-textMuted dark:text-github-dark-textMuted mb-4">
+                    Verity Cloud9 is packaged for all major operating systems and container registries. Choose your preferred environment below:
+                </p>
+
+                <!-- Tabs for installation -->
+                <div class="border border-github-light-border dark:border-github-dark-border rounded-lg overflow-hidden mb-6">
+                    <div class="flex border-b border-github-light-border dark:border-github-dark-border bg-github-light-canvas dark:bg-github-dark-canvas">
+                        <button onclick="switchTab('docker')" id="tab-docker" class="px-4 py-2.5 text-sm font-medium border-b-2 border-github-light-accent dark:border-github-dark-accent text-github-light-accent dark:text-github-dark-accent">Docker Compose</button>
+                        <button onclick="switchTab('kubernetes')" id="tab-kubernetes" class="px-4 py-2.5 text-sm font-medium border-b-2 border-transparent text-github-light-textMuted dark:text-github-dark-textMuted hover:text-github-light-text dark:hover:text-github-dark-text">Kubernetes (Helm)</button>
+                        <button onclick="switchTab('binary')" id="tab-binary" class="px-4 py-2.5 text-sm font-medium border-b-2 border-transparent text-github-light-textMuted dark:text-github-dark-textMuted hover:text-github-light-text dark:hover:text-github-dark-text">Manual Binary</button>
+                    </div>
+                    <div id="content-docker" class="p-4 bg-github-light-bg dark:bg-github-dark-bg">
+                        <p class="text-sm text-github-light-textMuted dark:text-github-dark-textMuted mb-3">Run Verity Cloud9 locally using our official docker compose manifest:</p>
+                        <pre class="p-3 bg-github-light-codeBg dark:bg-github-dark-codeBg border border-github-light-border dark:border-github-dark-border rounded font-mono text-xs overflow-x-auto"><code>version: '3.8'
+services:
+  v9-node:
+    image: veritycloud/core:latest
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - V9_CLUSTER_MODE=standalone</code></pre>
+                    </div>
+                    <div id="content-kubernetes" class="p-4 bg-github-light-bg dark:bg-github-dark-bg hidden">
+                        <p class="text-sm text-github-light-textMuted dark:text-github-dark-textMuted mb-3">Deploy via Helm chart into your existing K8s cluster:</p>
+                        <pre class="p-3 bg-github-light-codeBg dark:bg-github-dark-codeBg border border-github-light-border dark:border-github-dark-border rounded font-mono text-xs overflow-x-auto"><code>helm repo add verity https://charts.veritycloud9.io
+helm repo update
+helm install my-v9-release verity/cloud9-operator --namespace v9-system --create-namespace</code></pre>
+                    </div>
+                    <div id="content-binary" class="p-4 bg-github-light-bg dark:bg-github-dark-bg hidden">
+                        <p class="text-sm text-github-light-textMuted dark:text-github-dark-textMuted mb-3">Download precompiled binaries directly from GitHub Releases:</p>
+                        <pre class="p-3 bg-github-light-codeBg dark:bg-github-dark-codeBg border border-github-light-border dark:border-github-dark-border rounded font-mono text-xs overflow-x-auto"><code>wget https://github.com/veritycloud/cloud9/releases/download/v2.4.0/v9_linux_amd64.tar.gz
+tar -zxvf v9_linux_amd64.tar.gz && sudo mv v9 /usr/local/bin/</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: Architecture -->
+            <section id="architecture" class="scroll-mt-20 mb-12">
+                <h2 class="text-2xl font-semibold border-b border-github-light-border dark:border-github-dark-border pb-3 mb-4">Architecture & Nodes</h2>
+                <p class="text-github-light-textMuted dark:text-github-dark-textMuted mb-4">
+                    The Verity Cloud9 topology consists of three primary node tiers designed to isolate control plane traffic from heavy data workloads.
+                </p>
+
+                <!-- Table -->
+                <div class="overflow-x-auto border border-github-light-border dark:border-github-dark-border rounded-lg mb-6">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-github-light-canvas dark:bg-github-dark-canvas border-b border-github-light-border dark:border-github-dark-border text-github-light-textMuted dark:text-github-dark-textMuted">
+                                <th class="p-3 font-semibold">Tier Name</th>
+                                <th class="p-3 font-semibold">Primary Role</th>
+                                <th class="p-3 font-semibold">Default Port</th>
+                                <th class="p-3 font-semibold">HA Recommendation</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-github-light-border dark:divide-github-dark-border">
+                            <tr>
+                                <td class="p-3 font-medium">Control Node</td>
+                                <td class="p-3 text-github-light-textMuted dark:text-github-dark-textMuted">Consensus & state coordination</td>
+                                <td class="p-3 font-mono text-xs">9000</td>
+                                <td class="p-3"><span class="px-2 py-0.5 text-xs rounded bg-blue-500/10 text-blue-500 font-medium">Min 3 nodes</span></td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-medium">Edge Ingress</td>
+                                <td class="p-3 text-github-light-textMuted dark:text-github-dark-textMuted">SSL termination & routing</td>
+                                <td class="p-3 font-mono text-xs">443 / 80</td>
+                                <td class="p-3"><span class="px-2 py-0.5 text-xs rounded bg-emerald-500/10 text-emerald-500 font-medium">Auto-scaled</span></td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-medium">Worker Node</td>
+                                <td class="p-3 text-github-light-textMuted dark:text-github-dark-textMuted">Job execution & data caching</td>
+                                <td class="p-3 font-mono text-xs">9002</td>
+                                <td class="p-3"><span class="px-2 py-0.5 text-xs rounded bg-purple-500/10 text-purple-500 font-medium">Dynamic pool</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- SECTION: Configuration -->
+            <section id="configuration" class="scroll-mt-20 mb-12">
+                <h2 class="text-2xl font-semibold border-b border-github-light-border dark:border-github-dark-border pb-3 mb-4">Configuration File</h2>
+                <p class="text-github-light-textMuted dark:text-github-dark-textMuted mb-4">
+                    The cluster parameters are controlled via <code class="px-1.5 py-0.5 text-xs bg-github-light-canvas dark:bg-github-dark-canvas border border-github-light-border dark:border-github-dark-border rounded font-mono">v9.config.yaml</code> located at the root of your installation path.
+                </p>
+
+                <div class="relative rounded-md border border-github-light-border dark:border-github-dark-border bg-github-light-codeBg dark:bg-github-dark-codeBg mb-6 overflow-hidden">
+                    <div class="flex items-center justify-between px-4 py-2 bg-github-light-canvas dark:bg-github-dark-canvas border-b border-github-light-border dark:border-github-dark-border text-xs text-github-light-textMuted dark:text-github-dark-textMuted">
+                        <span>v9.config.yaml</span>
+                        <button onclick="copyCode(this)" class="hover:text-github-light-accent dark:hover:text-github-dark-accent transition flex items-center space-x-1">
+                            <i class="fa-regular fa-copy"></i><span>Copy</span>
+                        </button>
+                    </div>
+                    <pre class="p-4 text-xs sm:text-sm font-mono overflow-x-auto text-github-light-text dark:text-github-dark-text"><code><span class="text-blue-500">cluster</span>:
+  <span class="text-amber-500">name</span>: <span class="text-emerald-500">"production-us-east"</span>
+  <span class="text-amber-500">region</span>: <span class="text-emerald-500">"us-east-1"</span>
+  <span class="text-amber-500">heartbeat_interval_ms</span>: <span class="text-purple-400">250</span>
+
+<span class="text-blue-500">security</span>:
+  <span class="text-amber-500">mtls_enabled</span>: <span class="text-purple-400">true</span>
+  <span class="text-amber-500">cert_ttl_hours</span>: <span class="text-purple-400">72</span>
+
+<span class="text-blue-500">storage</span>:
+  <span class="text-amber-500">engine</span>: <span class="text-emerald-500">"rocksdb"</span>
+  <span class="text-amber-500">max_cache_mb</span>: <span class="text-purple-400">4096</span></code></pre>
+                </div>
+            </section>
+
+            <!-- SECTION: API Reference -->
+            <section id="api-reference" class="scroll-mt-20 mb-12">
+                <h2 class="text-2xl font-semibold border-b border-github-light-border dark:border-github-dark-border pb-3 mb-4">API Reference</h2>
+                <p class="text-github-light-textMuted dark:text-github-dark-textMuted mb-6">
+                    Verity Cloud9 exposes a fully compliant REST and gRPC management API. Below is the specification for the core status endpoint.
+                </p>
+
+                <div class="border border-github-light-border dark:border-github-dark-border rounded-lg overflow-hidden mb-6">
+                    <div class="flex items-center space-x-3 px-4 py-3 bg-github-light-canvas dark:bg-github-dark-canvas border-b border-github-light-border dark:border-github-dark-border">
+                        <span class="px-2 py-0.5 text-xs font-bold rounded bg-emerald-500 text-white">GET</span>
+                        <code class="text-sm font-mono font-semibold">/api/v2/cluster/health</code>
+                    </div>
+                    <div class="p-4 space-y-4 bg-github-light-bg dark:bg-github-dark-bg">
+                        <div>
+                            <h4 class="text-xs font-semibold uppercase text-github-light-textMuted dark:text-github-dark-textMuted mb-2">Headers</h4>
+                            <div class="text-xs font-mono bg-github-light-codeBg dark:bg-github-dark-codeBg p-3 rounded border border-github-light-border dark:border-github-dark-border">
+                                Authorization: Bearer &lt;v9_token&gt;<br>
+                                Accept: application/json
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-semibold uppercase text-github-light-textMuted dark:text-github-dark-textMuted mb-2">Example Response (200 OK)</h4>
+                            <pre class="text-xs font-mono bg-github-light-codeBg dark:bg-github-dark-codeBg p-3 rounded border border-github-light-border dark:border-github-dark-border overflow-x-auto text-github-light-text dark:text-github-dark-text"><code>{
+  "status": "healthy",
+  "active_nodes": 12,
+  "sync_latency_ms": 0.42,
+  "uptime_seconds": 1294800
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: FAQ -->
+            <section id="faq" class="scroll-mt-20 mb-12">
+                <h2 class="text-2xl font-semibold border-b border-github-light-border dark:border-github-dark-border pb-3 mb-4">Frequently Asked Questions</h2>
+                
+                <div class="space-y-4">
+                    <div class="border border-github-light-border dark:border-github-dark-border rounded-lg p-4 bg-github-light-canvas dark:bg-github-dark-canvas">
+                        <h3 class="font-semibold text-base mb-2">Can Verity Cloud9 run across multiple cloud providers?</h3>
+                        <p class="text-sm text-github-light-textMuted dark:text-github-dark-textMuted">Yes! Cloud9 is engineered specifically for hybrid and multi-cloud overlays, supporting AWS, GCP, and Azure simultaneous peering out of the box.</p>
+                    </div>
+                    <div class="border border-github-light-border dark:border-github-dark-border rounded-lg p-4 bg-github-light-canvas dark:bg-github-dark-canvas">
+                        <h3 class="font-semibold text-base mb-2">How is node authentication handled?</h3>
+                        <p class="text-sm text-github-light-textMuted dark:text-github-dark-textMuted">Nodes authenticate using short-lived X.509 certificates automatically rotated by the internal compliance engine every 72 hours.</p>
+                    </div>
+                    <div class="border border-github-light-border dark:border-github-dark-border rounded-lg p-4 bg-github-light-canvas dark:bg-github-dark-canvas">
+                        <h3 class="font-semibold text-base mb-2">Where can I report security vulnerabilities?</h3>
+                        <p class="text-sm text-github-light-textMuted dark:text-github-dark-textMuted">Please review our security policy on GitHub or email security@veritycloud9.io directly for responsible disclosure guidelines.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer within main -->
+            <footer class="pt-8 mt-12 border-t border-github-light-border dark:border-github-dark-border text-xs text-github-light-textMuted dark:text-github-dark-textMuted flex flex-col sm:flex-row items-center justify-between pb-12">
+                <div class="flex items-center space-x-4 mb-4 sm:mb-0">
+                    <span>© 2026 Verity Cloud Technologies, Inc.</span>
+                    <a href="#" class="hover:underline">Privacy</a>
+                    <a href="#" class="hover:underline">Terms</a>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <span class="inline-flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>All systems operational</span>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Script Controllers -->
+    <script>
+        // Theme Toggle Logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (htmlElement.classList.contains('dark')) {
+                htmlElement.classList.remove('dark');
+                htmlElement.classList.add('light');
+                localStorage.setItem('v9_theme', 'light');
+            } else {
+                htmlElement.classList.remove('light');
+                htmlElement.classList.add('dark');
+                localStorage.setItem('v9_theme', 'dark');
+            }
+        });
+
+        // Initialize theme from storage preference
+        if (localStorage.getItem('v9_theme') === 'light') {
+            htmlElement.classList.remove('dark');
+            htmlElement.classList.add('light');
+        }
+
+        // Mobile Menu Toggle Logic
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+
+        function toggleMobileMenu() {
+            sidebar.classList.toggle('-translate-x-full');
+            sidebarBackdrop.classList.toggle('hidden');
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        sidebarBackdrop.addEventListener('click', toggleMobileMenu);
+
+        // Close sidebar on link click for mobile
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 768) {
+                    toggleMobileMenu();
+                }
+            });
+        });
+
+        // Installation Tab Switcher
+        function switchTab(tabName) {
+            ['docker', 'kubernetes', 'binary'].forEach(t => {
+                const content = document.getElementById(`content-${t}`);
+                const btn = document.getElementById(`tab-${t}`);
+                if (t === tabName) {
+                    content.classList.remove('hidden');
+                    btn.className = "px-4 py-2.5 text-sm font-medium border-b-2 border-github-light-accent dark:border-github-dark-accent text-github-light-accent dark:text-github-dark-accent";
+                } else {
+                    content.classList.add('hidden');
+                    btn.className = "px-4 py-2.5 text-sm font-medium border-b-2 border-transparent text-github-light-textMuted dark:text-github-dark-textMuted hover:text-github-light-text dark:hover:text-github-dark-text";
+                }
+            });
+        }
+
+        // Copy Code to Clipboard handler
+        function copyCode(btn) {
+            const pre = btn.parentElement.nextElementSibling;
+            const text = pre.innerText;
+            
+            // Using document.execCommand fallback / clipboard API
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showCopiedFeedback(btn);
+                }).catch(() => fallbackCopy(text, btn));
+            } else {
+                fallbackCopy(text, btn);
+            }
+        }
+
+        function fallbackCopy(text, btn) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showCopiedFeedback(btn);
+            } catch (err) {
+                console.error('Failed to copy text', err);
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function showCopiedFeedback(btn) {
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check text-emerald-500"></i><span class="text-emerald-500">Copied!</span>';
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+            }, 2000);
+        }
+
+        // Keyboard Shortcut for Search (Cmd+K or /)
+        window.addEventListener('keydown', (e) => {
+            const searchInput = document.getElementById('search-input');
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                searchInput.focus();
+            } else if (e.key === '/' && document.activeElement !== searchInput && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+                searchInput.focus();
+            }
+        });
+
+        // Basic instant search filtering for headings
+        const searchInput = document.getElementById('search-input');
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            const sections = document.querySelectorAll('main section');
+            
+            if (!query) {
+                sections.forEach(s => s.style.opacity = '1');
+                return;
+            }
+
+            sections.forEach(sec => {
+                const text = sec.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    sec.style.opacity = '1';
+                } else {
+                    sec.style.opacity = '0.3';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
